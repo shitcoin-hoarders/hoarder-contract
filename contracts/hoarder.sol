@@ -2,11 +2,11 @@
 pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
 
 contract Hoarder is Ownable, Pausable, ReentrancyGuard, IERC721Receiver {
@@ -34,13 +34,7 @@ contract Hoarder is Ownable, Pausable, ReentrancyGuard, IERC721Receiver {
     /**
      * Event emitted when non fungible token(s) are harvested by the contract.
      */
-    event TokensHarvested(address indexed sender, NFT[] tokens);
-
-    /**
-     * Event emitted when non fungible token(s) are repurchased.
-     */
-    event TokensRepurchased(address indexed sender, NFT[] tokens);
-
+    event NFTsHarvested(address indexed sender, NFT[] tokens);
 
     /**
      * Function which enables external consumers to sell
@@ -48,7 +42,7 @@ contract Hoarder is Ownable, Pausable, ReentrancyGuard, IERC721Receiver {
      * the contract will transfer the tokens to itself (the contract)
      * and pay the sender a fixed amount of ETH for each token.
      */
-    function sellTokens(NFT[] calldata tokens)
+    function sellNFT(NFT[] calldata tokens)
         external
         nonReentrant
         whenNotPaused
@@ -88,7 +82,7 @@ contract Hoarder is Ownable, Pausable, ReentrancyGuard, IERC721Receiver {
         }
 
         // Emit event
-        emit TokensHarvested(sender, tokens);
+        emit NFTsHarvested(sender, tokens);
 
         // Transfer ETH to sender
         Address.sendValue(sender, calculatedValue);
